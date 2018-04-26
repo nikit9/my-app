@@ -1,16 +1,12 @@
 import React, { Component } from 'react';
 import MyTextCell from './myTextCell';
 import MyButtonCell from './myButtonCell';
+import {Table, Column, Cell} from 'fixed-data-table-2';
 import _ from "lodash";
-
-const {Table, Column, Cell} = require('fixed-data-table-2');
 
 class CurrencyTable extends Component {
     constructor(props) {
         super(props);
-        this.data = this.props.data;
-        // console.log("in currencyTable");
-        // console.log(this.props.data);
 
         this.state = {
             myTableData: props.data,

@@ -22,7 +22,6 @@ class App extends Component {
             initialCountries: [],
             allData: [],
             shownData:[],
-            // initialData:[],
             value:'',
         }
     }
@@ -31,7 +30,6 @@ class App extends Component {
         this.setState({shownCountries: ['EUR', 'ILS', 'USD', 'GBP', 'AUD']});
         this.setState({initialCountries: ['EUR', 'ILS', 'USD', 'GBP', 'AUD']});
 
-        // localStorage.setItem('shownC', JSON.stringify(this.shownCountries));
         const cachedCountries = localStorage.getItem('shownC');
         if (!cachedCountries)
             localStorage.setItem('shownC', JSON.stringify(this.state.shownCountries));
@@ -45,13 +43,11 @@ class App extends Component {
             .then(result => {
                 let rates = result.rates;
                 let shownData = [];
-                // let initialData = [];
                 let allData = [];
                 let i = 0;
                 let j = 0;
                 let k = 0;
 
-                //check for saved data in local storage:
                 Object.keys(rates).forEach(key => {
                     if (this.state.shownCountries.indexOf(key) > -1){
                         shownData[j] = {rate: key, value: rates[key], button: "btn btn-danger red"};
@@ -63,7 +59,7 @@ class App extends Component {
                     }
                     allData[i] = {rate: key, value: rates[key], button: "btn btn-danger red"};
                     i++;
-                })
+                });
 
                 this.setState({allData: allData, shownData: shownData});
             })
@@ -145,9 +141,7 @@ class App extends Component {
                         </div>
                     </div>
                 </div>
-
             </div>
-
         );
     }
 }

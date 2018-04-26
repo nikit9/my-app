@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-const {Cell} = require('fixed-data-table-2');
+import {Cell} from 'fixed-data-table-2';
 
 class MyButtonCell extends Component {
     render() {
@@ -11,7 +11,6 @@ class MyButtonCell extends Component {
             <Cell {...props}>
                 <button type="button" className={button}
                 onClick={() => {
-                    // console.log(rate);
                     this.onClickHandler(rate);
                 }}>
                     Remove Me</button>

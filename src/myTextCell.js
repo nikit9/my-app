@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-const {Cell} = require('fixed-data-table-2');
+import {Cell} from 'fixed-data-table-2';
 
 class MyTextCell extends Component {
     render() {
