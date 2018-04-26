@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import CurrencyTable from './currencyTable';
 import SearchBar from './searchBar';
-// import _ from 'lodash';
+import _ from 'lodash';
 import RevertButton from './revertButton';
 import logo from './logo.svg';
 import './App.css';
@@ -77,23 +77,28 @@ class App extends Component {
     }
 
     handleChangeValue = value => {
-        let newRateObj = {rate: value, value: this.findValue(value), button: "btn btn-danger red"};
-        this.setState({
-            shownData: this.state.shownData.concat([newRateObj])
-        });
-        this.state.shownCountries.concat([value]);
-        localStorage.setItem('shownC', JSON.stringify(this.state.shownCountries));
+        if (_.findIndex(this.state.shownData, {rate: value}) < 0) {
+            console.log(this.state.shownCountries);
+            const newShownCountries = JSON.parse(JSON.stringify(this.state.shownCountries.concat([value])));
+            const newRateObj = {rate: value, value: this.findValue(value), button: "btn btn-danger red"};
+            this.setState({
+                shownData: this.state.shownData.concat([newRateObj]),
+                shownCountries: newShownCountries},
+                function () {localStorage.setItem('shownC', JSON.stringify(newShownCountries))});
+        }
     }
 
     handleRevertClick = () => {
-        console.log(this.initialData);
         localStorage.setItem('shownC', JSON.stringify(this.state.initialCountries));
-            this.setState({shownData: this.initialData});
-        console.log(this.initialData);
+        const tempInitialCountries = JSON.parse(JSON.stringify(this.state.initialCountries));
+        const tempInitialData = JSON.parse(JSON.stringify(this.initialData));
+        this.setState({shownData: tempInitialData, shownCountries: tempInitialCountries});
     };
 
     saveToLocalStorage(data) {
-        localStorage.setItem('shownC', JSON.stringify(this.getShownCList(data)));
+        const newShownCountries = JSON.parse(JSON.stringify(this.getShownCList(data)));
+        localStorage.setItem('shownC', JSON.stringify(newShownCountries));
+        this.setState({shownCountries: newShownCountries});
     }
 
     getShownCList(data){
@@ -101,14 +106,11 @@ class App extends Component {
         for (let i=0;i<data.length;i++){
             shownC.push(data[i].rate);
         }
-        // console.log(shownC);
         return shownC;
     }
 
 
     render() {
-        console.log("initialData is:");
-        console.log(this.initialData);
         if (this.initialData.length===0)
             return 'loading...';
         return (
