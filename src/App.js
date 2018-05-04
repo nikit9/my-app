@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import CurrencyTable from './currencyTable';
 import SearchBar from './searchBar';
+import DateBar from './dateBar';
 import _ from 'lodash';
 import RevertButton from './revertButton';
 import logo from './logo.svg';
@@ -23,7 +24,7 @@ class App extends Component {
             allData: [],
             shownData:[],
             value:'',
-        }
+        };
     }
 
     componentDidMount(){
@@ -36,33 +37,7 @@ class App extends Component {
         else
             this.setState({shownCountries: JSON.parse(cachedCountries)});
 
-        fetch(`http://data.fixer.io/api/${endpoint}?access_key=${API_KEY}`)
-            .then(results => {
-                return results.json();
-            })
-            .then(result => {
-                let rates = result.rates;
-                let shownData = [];
-                let allData = [];
-                let i = 0;
-                let j = 0;
-                let k = 0;
-
-                Object.keys(rates).forEach(key => {
-                    if (this.state.shownCountries.indexOf(key) > -1){
-                        shownData[j] = {rate: key, value: rates[key], button: "btn btn-danger red"};
-                        j++;
-                    }
-                    if (this.state.initialCountries.indexOf(key) > -1){
-                        this.initialData[k] = {rate: key, value: rates[key], button: "btn btn-danger red"};
-                        k++;
-                    }
-                    allData[i] = {rate: key, value: rates[key], button: "btn btn-danger red"};
-                    i++;
-                });
-
-                this.setState({allData: allData, shownData: shownData});
-            })
+        this.getInfo(endpoint);
     }
 
     findValue(rate){
@@ -105,6 +80,37 @@ class App extends Component {
         return shownC;
     }
 
+    getInfo(endpoint){
+        let apiUrl =`http://data.fixer.io/api/${endpoint}?access_key=${API_KEY}`;
+        fetch(apiUrl)
+            .then(results => {
+                return results.json();
+            })
+            .then(result => {
+                let rates = result.rates;
+                let shownData = [];
+                let allData = [];
+                let i = 0;
+                let j = 0;
+                let k = 0;
+
+                Object.keys(rates).forEach(key => {
+                    if (this.state.shownCountries.indexOf(key) > -1){
+                        shownData[j] = {rate: key, value: rates[key], button: "btn btn-danger red"};
+                        j++;
+                    }
+                    if (this.state.initialCountries.indexOf(key) > -1){
+                        this.initialData[k] = {rate: key, value: rates[key], button: "btn btn-danger red"};
+                        k++;
+                    }
+                    allData[i] = {rate: key, value: rates[key], button: "btn btn-danger red"};
+                    i++;
+                });
+
+                this.setState({allData: allData, shownData: shownData});
+            })
+    }
+
 
     render() {
         if (this.initialData.length===0)
@@ -127,6 +133,12 @@ class App extends Component {
                         </div>
                         <div className="col-lg-6 searchAndRevertContainer">
                             <div className="row">
+                                <div className="row-md-4">
+                                        <DateBar
+                                            onChangeValue = {
+                                                (formattedDate) =>
+                                                    this.getInfo(formattedDate)} />
+                                </div>
                                 <div className="row-md-4">
                                     <SearchBar
                                         value={this.state.value}

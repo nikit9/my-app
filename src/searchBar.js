@@ -10,7 +10,7 @@ class SearchBar extends Component {
 
     render() {
         return (
-            <div className="searchBarContainer row-lg-4">
+            <div className="barContainer row-lg-4">
                 <h4>Add a currency!</h4>
                 <div className="selectSearchBar">
                     <select className="form-control" value="yes"
